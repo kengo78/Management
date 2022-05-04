@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>家計簿アプリ</title>
+  <link rel="stylesheet" href="{% static 'kakeibo/css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'kakeibo/css/style.css' %}">
+  {% block extrajs %}
+
+  {% endblock %}
+</head>
+
+<body>
+  <header class="page-header">
+    <h1>
+      <a href="{% url 'kakeibo:payment_list' %}" class="header-title">家計簿アプリ</a>
+    </h1>
+    <nav class="nav">
+      <ul class="main-nav ml-5">
+        <li class="ml-5">
+          <a href="{% url 'kakeibo:payment_list'%}">支出一覧</a>
+        </li>
+        <li class="ml-5">
+          <a href="{% url 'kakeibo:income_list'%}">収入一覧</a>
+        </li>
+    </nav>
+  </header>
+
+  <div class="layout">
+    <div class="container">
+      <main>
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+
+</body>
+
+</html>
