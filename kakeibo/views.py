@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.views import generic
+from django.contrib import messages
 from .models import Payment, PaymentCategory, Income, IncomeCategory, PaymentCard
-from .forms import PaymentSearchForm, IncomeSearchForm
+from .forms import PaymentSearchForm, IncomeSearchForm,PaymentCreateForm, IncomeCreateForm
+from django.urls import reverse_lazy
 
 
 class PaymentList(generic.ListView):
@@ -86,3 +88,30 @@ class IncomeList(generic.ListView):
         context['search_form'] = self.form
 
         return context
+    
+class PaymentCreate(generic.CreateView):
+    "支出登録"
+    template_name = 'kakeibo/register.html'
+    model = Payment
+    form_class = PaymentCreateForm
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = '支出登録'
+        return context
+    def get_success_url(self):
+        return reverse_lazy('kakeibo:payment_list')
+    
+class IncomeCreate(generic.CreateView):
+    """収入登録"""
+    template_name = 'kakeibo/register.html'
+    model = Income
+    form_class = IncomeCreateForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = '収入登録'
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('kakeibo:income_list')
