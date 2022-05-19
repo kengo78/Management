@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 class GraphGenerator:
     
     def month_pie(self, labels, values):
-        fig = go.Figure()
+        fig = go.Figure()#インスタンス作成
         fig.add_trace(go.Pie(labels=labels,
                              values=values))
         return fig.to_html(include_plotlyjs = False)
