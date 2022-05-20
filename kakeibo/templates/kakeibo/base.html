@@ -5,9 +5,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>家計簿アプリ</title>
+  <title class='mx-auto'>家計簿アプリ</title>
   <link rel="stylesheet" href="{% static 'kakeibo/css/bootstrap.css' %}">
   <link rel="stylesheet" href="{% static 'kakeibo/css/style.css' %}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   {% block extrajs %}
 
   {% endblock %}
@@ -16,9 +17,9 @@
 <body>
   <header class="page-header">
     <h1>
-      <a href="{% url 'kakeibo:payment_list' %}" class="header-title">家計簿アプリ</a>
+      <a href="{% url 'kakeibo:payment_list' %}" class="header-title mx-auto">家計簿アプリ</a>
     </h1>
-    <nav class="nav">
+    <nav class="nav mx-auto">
       <ul class="main-nav ml-5">
         <li class="ml-5">
           <a href="{% url 'kakeibo:payment_list'%}">支出一覧</a>
