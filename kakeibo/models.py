@@ -16,7 +16,7 @@ class Payment(models.Model):
     price = models.IntegerField('金額')
     card_type = models.ForeignKey(PaymentCard, on_delete=models.PROTECT, verbose_name='カード')
     category = models.ForeignKey(PaymentCategory, on_delete=models.PROTECT, verbose_name='カテゴリ')
-    description = models.TextField('摘要', null=True, blank=True)
+    description = models.TextField('詳細', null=True, blank=True)
 
 
 class IncomeCategory(models.Model):
@@ -30,6 +30,6 @@ class Income(models.Model):
     date = models.DateField('日付')
     price = models.IntegerField('金額')
     category = models.ForeignKey(IncomeCategory, on_delete=models.PROTECT, verbose_name='カテゴリ')
-    description = models.TextField('摘要', null=True, blank=True)
+    description = models.TextField('詳細', null=True, blank=True)
     
 #合計額表示用

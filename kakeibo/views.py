@@ -1,15 +1,29 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import generic
+from django.views.generic import TemplateView, CreateView
 from django.contrib import messages
 from .models import Payment, PaymentCategory, Income, IncomeCategory, PaymentCard
-from .forms import PaymentSearchForm, IncomeSearchForm,PaymentCreateForm, IncomeCreateForm
+from .forms import PaymentSearchForm, IncomeSearchForm,PaymentCreateForm, IncomeCreateForm, SignUpForm
 from django.urls import reverse_lazy
 import numpy as np
 import pandas as pd
 from django_pandas.io import read_frame
 from .plotly import GraphGenerator
+from django.contrib.auth import login
 
 
+class SignUp(CreateView):
+    form_class = SignUpForm
+    template_name = 'kakeibo/signup.html'
+    success_url = reverse_lazy('kakeibo:payment_list')
+    
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, usre)
+        self.object = user
+        return HttpResponseRedirect(self.get_success_url())
+    
 
 class PaymentList(generic.ListView):
     template_name = 'kakeibo/payment_list.html'
