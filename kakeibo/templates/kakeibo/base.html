@@ -17,7 +17,7 @@
 <body>
   <header class="page-header">
     <h1>
-      <a href="{% url 'kakeibo:payment_list' %}" class="header-title mx-auto">家計簿アプリ</a>
+      <a href="{% url 'kakeibo:payment_list' %}" class="header-title mx-auto">家計簿管理</a>
     </h1>
     <nav class="nav mx-auto">
       <ul class="main-nav ml-5">
@@ -36,9 +36,9 @@
         <li class="ml-5">
           <a href="{% url 'kakeibo:month_dashboard' now_year now_month%}">月間支出</a>
         </li>
-        <li class="ml-5">
+        {% comment %} <li class="ml-5">
           <p><a href="{% url 'kakeibo:signup' %}">ユーザ作成</a></p>   
-        </li<
+        </li< {% endcomment %}
     </nav>
   </header>
 

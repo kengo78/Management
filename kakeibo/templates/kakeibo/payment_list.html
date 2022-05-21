@@ -3,33 +3,37 @@
 {% load kakeibo %}
 {% block content %}
 
-<form class="mt-2" id="search-form" action="" method="GET">
-    <form class="mt-2" id="search-form" action="" method="GET">
-        <div>
-          <label class="label mr-4">年月</label>
-          {{ search_form.year }}
-          {{ search_form.month }}
-        </div>
-        <div class='mt-4'><label class="label mr-4">カードタイプ</label>
-            {{ search_form.card_type }}
-        </div>
-        <div class="mt-4">
-          <label class="label mr-4">金額</label>
-          {{ search_form.greater_than }}
-          <span class="ml-4 mr-4">～</span>
-          {{ search_form.less_than }}
-        </div>
-        <div class="mt-4">
-          {{ search_form.key_word }}
-          <button class="btn btn-info ml-4" type="submit">検索</button>
-        </div>
-        <div class="mt-2 inline">
-          {{ search_form.category }}
-        </div>
-      </form>
-</form>
 
-<table class="table mt-3">
+<div class="mb-3" style="max-width: 30rem;">
+  検索部分
+  <form class="mb-2 mx-auto" id="search-form" action="" method="GET">
+      <form class="mb-2" id="search-form" action="" method="GET">
+          <div>
+            <label class="label mr-4">年月</label>
+            {{ search_form.year }}
+            {{ search_form.month }}
+          </div>
+          <div class='mb-4'><label class="label mr-4">カードタイプ</label>
+              {{ search_form.card_type }}
+          </div>
+          <div class="mb-4">
+            <label class="label mr-4">金額</label>
+            {{ search_form.greater_than }}
+            <span class="mb-4 mr-4">～</span>
+            {{ search_form.less_than }}
+          </div>
+          <div class="mb-4">
+            {{ search_form.key_word }}
+            <button class="btn btn-info mb-3" type="submit">検索</button>
+          </div>
+          <div class="mb-2 inline">
+            {{ search_form.category }}
+          </div>
+        </form>
+  </form>
+</div>
+
+<table class="table mb-3">
   <tr>
     <th>日付</th>
     <th>カテゴリ</th>
@@ -62,8 +66,8 @@
   {% endfor %}
 </table>
 
-<div class="mt-5">
-    <div class="mt-5">
+<div class="mb-5">
+    <div class="mb-5">
         {% if page_obj.has_previous %}
         <a class="mr-2 prev" href="?{% url_replace request 'page' page_obj.previous_page_number %}" title="前ページへ">前へ</a>
         {% endif %}
@@ -71,7 +75,7 @@
         <span style="color:#0d1a3c">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
       
         {% if page_obj.has_next %}
-        <a class="ml-2 next" href="?{% url_replace request 'page' page_obj.next_page_number %}" title="次ページへ">次へ</a>
+        <a class="mb-2 next" href="?{% url_replace request 'page' page_obj.next_page_number %}" title="次ページへ">次へ</a>
         {% endif %}
       </div>
 </div>

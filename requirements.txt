@@ -4,3 +4,4 @@ django-environ
 pandas
 plotly
 django-import-export
+numpy
