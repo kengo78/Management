@@ -6,17 +6,17 @@ import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# env = environ.Env()
-# env.read_env(os.path.join(BASE_DIR, '.env'))
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 # DEBUG = env.get_value('DEBUG', cast = bool)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 
 
-ALLOWED_HOSTS = ['damp-dusk-09788.herokuapp.com']
+ALLOWED_HOSTS = ['damp-dusk-09788.herokuapp.com','127.0.0.1',]
 
 
 # Application definition
@@ -36,6 +36,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
