@@ -120,6 +120,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'register.User'
 NUMBER_GROUPING=3
 
+DEBUG = False
 try:
     # 存在する場合、ローカルの設定読み込み
     from .settings_local import *
