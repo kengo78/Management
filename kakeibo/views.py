@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic import TemplateView, CreateView
@@ -23,6 +23,23 @@ from django.contrib.auth import login
 #         login(self.request, usre)
 #         self.object = user
 #         return HttpResponseRedirect(self.get_success_url())
+    
+class Toppage(generic.TemplateView):
+    template_name = 'kakeibo/toppage.html'
+    model = Payment
+    objects = Payment.objects.all()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # search formを渡す
+        objects = Payment.objects.all()
+        total = 0
+        for object in objects:
+            total += object.price
+        context['total'] = total
+        return context
+    
+    
     
 
 class PaymentList(generic.ListView):
@@ -286,8 +303,6 @@ class MonthDashboard(generic.TemplateView):
         pie_values = [val[0] for val in df_pie_type.values]
         plot_type_pie = gen.month_pie(labels=pie_type_labels, values=pie_values)
         context['plot_type_pie'] = plot_type_pie
-        
-
         return context
     
 
