@@ -2,6 +2,7 @@
 from pathlib import Path
 import os
 import environ
+from .settings_local import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,13 +11,13 @@ env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
-DEBUG = env.get_value('DEBUG', cast = bool)
+# DEBUG = env.get_value('DEBUG', cast = bool)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['damp-dusk-09788.herokuapp.com','127.0.0.1',]
 
 
 # Application definition
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -119,3 +121,62 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'register.User'
 NUMBER_GROUPING=3
+
+DEBUG = False
+try:
+<<<<<<< HEAD
+    #if exist ローカルの設定読み込み
+=======
+    # 存在する場合、ローカルの設定読み込み
+>>>>>>> main
+    from .settings_local import *
+except ImportError:
+    pass
+
+if not DEBUG:
+<<<<<<< HEAD
+    #heroku settings
+    
+    #static 設定
+    import os
+    import django_heroku
+=======
+    # Heroku settings
+
+    # staticの設定
+    import os
+    import django_heroku
+
+>>>>>>> main
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    # Static files (CSS, JavaScript, Images)
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATIC_URL = '/static/'
+
+    # Extra places for collectstatic to find static files.
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+    )
+
+    MIDDLEWARE += [
+        'whitenoise.middleware.WhiteNoiseMiddleware',
+    ]
+
+    # HerokuのConfigを読み込み
+<<<<<<< HEAD
+    django_heroku.settings(locals())
+=======
+    django_heroku.settings(locals())
+    
+from django.views.decorators.csrf import requires_csrf_token
+from django.http import (
+    HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound,
+    HttpResponseServerError,)
+@requires_csrf_token
+def my_customized_server_error(request, template_name='500.html'):
+    import sys
+    from django.views import debug
+    error_html = debug.technical_500_response(request, *sys.exc_info()).content
+    return HttpResponseServerError(error_html)
+>>>>>>> main

@@ -1,0 +1,11 @@
+{% extends 'kakeibo/base.html' %}
+{% load humanize %}
+{% block content %}
+
+<div>
+    今月の合計使用金額{{ total }}
+    -----現在編集中-------
+    {% comment %} monthごとに分けたい {% endcomment %}
+</div>
+  
+{% endblock %}

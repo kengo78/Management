@@ -31,5 +31,3 @@ class Income(models.Model):
     price = models.IntegerField('金額')
     category = models.ForeignKey(IncomeCategory, on_delete=models.PROTECT, verbose_name='カテゴリ')
     description = models.TextField('詳細', null=True, blank=True)
-    
-#合計額表示用
