@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic import TemplateView, CreateView
@@ -23,6 +23,50 @@ from django.contrib.auth import login
 #         login(self.request, usre)
 #         self.object = user
 #         return HttpResponseRedirect(self.get_success_url())
+    
+class Toppage(generic.TemplateView):
+    template_name = 'kakeibo/toppage.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # search formを渡す
+        # # これから表示する年月
+        # year = int(self.kwargs.get('year'))
+        # month = int(self.kwargs.get('month'))
+        # context['year_month'] = f'{year}年{month}月'
+
+        # # 前月と次月をコンテキストに入れて渡す
+        # if month == 1:
+        #     prev_year = int(year) - 1
+        #     prev_month = 12
+        # else:
+        #     prev_year = int(year)
+        #     prev_month = int(month) - 1
+
+        # if month == 12:
+        #     next_year = int(year) + 1
+        #     next_month = 1
+        # else:
+        #     next_year = int(year)
+        #     next_month = int(month) + 1
+        # context['prev_year'] = prev_year
+        # context['prev_month'] = prev_month
+        # context['next_year'] = next_year
+        # context['next_month'] = next_month
+        # queryset = Payment.objects.filter(date__year=year)
+        # queryset = queryset.filter(date__month=month)
+        # # クエリセットが何もない時はcontextを返す
+        # # 後の工程でエラーになるため
+        objects = Payment.objects.all()
+        total = 0
+        for object in objects:
+            total += object.price
+        context['total'] = total
+        # if not queryset:
+        #     return context
+        return context
+    
+    
     
 
 class PaymentList(generic.ListView):
@@ -286,8 +330,6 @@ class MonthDashboard(generic.TemplateView):
         pie_values = [val[0] for val in df_pie_type.values]
         plot_type_pie = gen.month_pie(labels=pie_type_labels, values=pie_values)
         context['plot_type_pie'] = plot_type_pie
-        
-
         return context
     
 

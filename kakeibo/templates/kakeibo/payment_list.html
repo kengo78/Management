@@ -3,8 +3,54 @@
 {% load kakeibo %}
 {% block content %}
 
+<table class="table mb-3 content">
+  <tr>
+    <th>日付</th>
+    <th>カテゴリ</th>
+    <th>金額</th>
+    <th>詳細</th>
+    <th>編集</th>
+  </tr>
+  {% for payment in payment_list %}
 
-<div class="mb-3" style="max-width: 30rem;">
+  <tr>
+    <td>{{ payment.date }}</td>
+    <td>{{ payment.category }}</td>
+    <td>{{ payment.price|intcomma}}</td>
+    <td>
+      {% if payment.description %}
+      {{ payment.description }}
+      {% endif %}
+    </td>
+    <td>
+      <div class="manage-btn-area">
+        <div class="update-btn-area">
+          <a class="btn btn-info" href="{% url 'kakeibo:payment_update' payment.pk %}">更新</a>
+        </div>
+        <div class="delete-btn-area">
+          <a class="btn btn-primary" href="{% url 'kakeibo:payment_delete' payment.pk %}">削除</a>
+        </div>
+      </div>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<div class="mb-5">
+    <div class="mb-5">
+        {% if page_obj.has_previous %}
+        <a class="mr-2 prev" href="?{% url_replace request 'page' page_obj.previous_page_number %}" title="前ページへ">前へ</a>
+        {% endif %}
+      
+        <span style="color:#0d1a3c">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+      
+        {% if page_obj.has_next %}
+        <a class="mb-2 next" href="?{% url_replace request 'page' page_obj.next_page_number %}" title="次ページへ">次へ</a>
+        {% endif %}
+      </div>
+</div>
+
+<div class="mb-3 content" style="max-width: 30rem;">
   検索部分
   <form class="mb-2 mx-auto" id="search-form" action="" method="GET">
       <form class="mb-2" id="search-form" action="" method="GET">
@@ -33,54 +79,11 @@
   </form>
 </div>
 
-<table class="table mb-3">
-  <tr>
-    <th>日付</th>
-    <th>カテゴリ</th>
-    <th>金額</th>
-    <th>詳細</th>
-    <th>編集</th>
-  </tr>
-  {% for payment in payment_list %}
-
-  <tr>
-    <td>{{ payment.date }}</td>
-    <td>{{ payment.category }}</td>
-    <td>{{ payment.price|intcomma}}</td>
-    <td>
-      {% if payment.description %}
-      {{ payment.description }}
-      {% endif %}
-    </td>
-    <td>
-      <div class="manage-btn-area">
-        <div class="update-btn-area">
-          <a class="btn btn-info" href="{% url 'kakeibo:payment_update' payment.pk %}">更新</a>
-        </div>
-        <div class="delete-btn-area">
-          <a class="btn btn-danger" href="{% url 'kakeibo:payment_delete' payment.pk %}">削除</a>
-        </div>
-      </div>
-    </td>
-  </tr>
-  {% endfor %}
-</table>
-
-<div class="mb-5">
-    <div class="mb-5">
-        {% if page_obj.has_previous %}
-        <a class="mr-2 prev" href="?{% url_replace request 'page' page_obj.previous_page_number %}" title="前ページへ">前へ</a>
-        {% endif %}
-      
-        <span style="color:#0d1a3c">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
-      
-        {% if page_obj.has_next %}
-        <a class="mb-2 next" href="?{% url_replace request 'page' page_obj.next_page_number %}" title="次ページへ">次へ</a>
-        {% endif %}
-      </div>
-</div>
-
 {% endblock %}
+
+
+
+
 
 {% comment %} js {% endcomment %}
 {% block extrajs %}
