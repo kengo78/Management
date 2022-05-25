@@ -204,7 +204,7 @@ class PaymentUpdate(generic.UpdateView):
     
 class IncomeUpdate(generic.UpdateView):
     """収入更新"""
-    teplate_name = 'kakeibo/register.html'
+    template_name = 'kakeibo/register.html'
     model = Income
     form_class = IncomeCreateForm
     
@@ -215,6 +215,9 @@ class IncomeUpdate(generic.UpdateView):
     
     def get_success_url(self):
         return reverse_lazy('kakeibo:income_list')
+
+
+    
     
 class PaymentDelete(generic.DeleteView):
     """支出削除"""
