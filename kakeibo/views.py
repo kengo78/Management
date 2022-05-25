@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic import TemplateView, CreateView
 from django.contrib import messages
-from .models import Payment, PaymentCategory, Income, IncomeCategory, PaymentCard
+from .models import Budget, Payment, PaymentCategory, Income, IncomeCategory, PaymentCard
 from .forms import PaymentSearchForm, IncomeSearchForm,PaymentCreateForm, IncomeCreateForm
 from django.urls import reverse_lazy
 import numpy as np
@@ -26,6 +26,8 @@ from django.contrib.auth import login
     
 class Toppage(generic.TemplateView):
     template_name = 'kakeibo/toppage.html'
+    # model = Budget
+    
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -66,8 +68,9 @@ class Toppage(generic.TemplateView):
         #     return context
         return context
     
-    
-    
+class BudgetCreate(generic.CreateView):
+    # template_name = 'kakeibo/budget_create.html'
+    model = Budget
 
 class PaymentList(generic.ListView):
     template_name = 'kakeibo/payment_list.html'

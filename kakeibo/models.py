@@ -31,3 +31,8 @@ class Income(models.Model):
     price = models.IntegerField('金額')
     category = models.ForeignKey(IncomeCategory, on_delete=models.PROTECT, verbose_name='カテゴリ')
     description = models.TextField('詳細', null=True, blank=True)
+
+class Budget(models.Model):
+    month = models.DateField('月')
+    price = models.IntegerField('予算')#自分で決める
+    rest = models.IntegerField('残額')
