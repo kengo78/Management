@@ -11,6 +11,7 @@ import pandas as pd
 from django_pandas.io import read_frame
 from .plotly import GraphGenerator
 from django.contrib.auth import login
+from django.utils import timezone
 
 
 # class SignUp(CreateView):
@@ -23,7 +24,8 @@ from django.contrib.auth import login
 #         login(self.request, usre)
 #         self.object = user
 #         return HttpResponseRedirect(self.get_success_url())
-    
+
+TODAY = str(timezone.now()).split('-')
 class Toppage(generic.TemplateView):
     template_name = 'kakeibo/toppage.html'
     # model = Budget
@@ -59,11 +61,26 @@ class Toppage(generic.TemplateView):
         # queryset = queryset.filter(date__month=month)
         # # クエリセットが何もない時はcontextを返す
         # # 後の工程でエラーになるため
-        objects = Payment.objects.all()
+        year = TODAY[0]
+        month = TODAY[1]
+        objects = Payment.objects.filter(
+            date__year = year, date__month = month
+        ).order_by("date")
         total = 0
         for object in objects:
             total += object.price
-        context['total'] = total
+            
+        next_year, next_month = get_next(year, month)
+        prev_year, prev_month = get_prev(year, month)
+        context = {
+            "year": year,
+            'month': month,
+            "total":total,
+            "next_year": next_year,
+            "next_month": next_month,
+            "prev_year": prev_year,
+            "prev_month": prev_month,
+        }
         # if not queryset:
         #     return context
         return context
@@ -337,7 +354,24 @@ class MonthDashboard(generic.TemplateView):
         plot_type_pie = gen.month_pie(labels=pie_type_labels, values=pie_values)
         context['plot_type_pie'] = plot_type_pie
         return context
+
+def get_next(year, month):
+    year = int(year)
+    month = int(month)
     
+    if month==12:
+        return str(year + 1), "1"
+    else:
+        return str(year), str(month+1)
+    
+def get_prev(year, month):
+    year = int(year)
+    month = int(month)
+    
+    if month == 1:
+        return str(year-1), "12"
+    else:
+        return str(year), str(month-1)
 
 # class Rest(generic.TemplateView):
 #     """予算残高の計算と表示"""
