@@ -1,6 +1,6 @@
 from cProfile import label
 from django import forms
-from .models import Payment, PaymentCategory,PaymentCard, Income
+from .models import Payment, PaymentCategory,PaymentCard, Income, IncomeCategory
 from django.utils import timezone
 from .widgets import RadioSelect
 from django.contrib.auth.forms import UserCreationForm
@@ -140,3 +140,32 @@ class IncomeCreateForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form'
             field.widget.attrs['placeholder'] = field.label
             field.widget.attrs['autocomplete'] = 'off'
+
+class TransitionGraphSearchForm(forms.Form):
+    """推移グラフの絞り込みフォーム"""
+
+    SHOW_CHOICES = (
+        ('All', 'All'),
+        ('Payment', 'Payment'),
+        ('Income', 'Income'),
+    )
+
+    payment_category = forms.ModelChoiceField(
+        label='支出カテゴリでの絞り込み',
+        required=False,
+        queryset=PaymentCategory.objects.order_by('name'),
+        widget=forms.Select(attrs={'class': 'form-select form-select-sm'}),
+    )
+
+    income_category = forms.ModelChoiceField(
+        label='収入カテゴリでの絞り込み',
+        required=False,
+        queryset=IncomeCategory.objects.order_by('name'),
+        widget=forms.Select(attrs={'class': 'form-select form-select-sm'}),
+    )
+
+    graph_visible = forms.ChoiceField(required=False,
+                                      label='表示グラフ',
+                                      choices=SHOW_CHOICES,
+                                      widget=forms.Select(attrs={'class': 'form-select form-select-sm'}),
+                                      )

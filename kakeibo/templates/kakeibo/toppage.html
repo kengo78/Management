@@ -2,10 +2,23 @@
 {% load humanize %}
 {% block content %}
 
-<div>
-    今月の合計使用金額{{ total }}
-    -----現在編集中-------
-    {% comment %} monthごとに分けたい {% endcomment %}
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">今月の合計使用金額</h5>
+      <p class="card-text">{{ total }}円</p>
+    </div>
+</div>
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">今月の予算</h5>
+      <p class="card-text">円</p>
+    </div>
+</div>
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">今月のクレカ支払い</h5>
+      <p class="card-text">{{ total_payment }}円</p>
+    </div>
 </div>
   
 {% endblock %}
