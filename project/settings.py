@@ -2,6 +2,7 @@
 from pathlib import Path
 import os
 import environ
+from .settings_local import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -123,18 +124,19 @@ NUMBER_GROUPING=3
 
 DEBUG = False
 try:
+    #if exist ローカルの設定読み込み
     # 存在する場合、ローカルの設定読み込み
     from .settings_local import *
 except ImportError:
     pass
-
 if not DEBUG:
+    import os
+    import django_heroku
     # Heroku settings
 
     # staticの設定
     import os
     import django_heroku
-
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     # Static files (CSS, JavaScript, Images)
@@ -151,6 +153,7 @@ if not DEBUG:
     ]
 
     # HerokuのConfigを読み込み
+    django_heroku.settings(locals())
     django_heroku.settings(locals())
     
 from django.views.decorators.csrf import requires_csrf_token

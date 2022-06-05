@@ -3,71 +3,62 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic import TemplateView, CreateView
 from django.contrib import messages
-from .models import Payment, PaymentCategory, Income, IncomeCategory, PaymentCard
-from .forms import PaymentSearchForm, IncomeSearchForm,PaymentCreateForm, IncomeCreateForm
+from .models import Budget, Payment, PaymentCategory, Income, IncomeCategory, PaymentCard
+from .forms import PaymentSearchForm, IncomeSearchForm,PaymentCreateForm, IncomeCreateForm,TransitionGraphSearchForm
 from django.urls import reverse_lazy
 import numpy as np
 import pandas as pd
 from django_pandas.io import read_frame
 from .plotly import GraphGenerator
 from django.contrib.auth import login
+from django.utils import timezone
+from kakeibo import plugins
 
 
-# class SignUp(CreateView):
-#     form_class = SignUpForm
-#     template_name = 'kakeibo/signup.html'
-#     success_url = reverse_lazy('kakeibo:payment_list')
-    
-#     def form_valid(self, form):
-#         user = form.save()
-#         login(self.request, usre)
-#         self.object = user
-#         return HttpResponseRedirect(self.get_success_url())
-    
+TODAY = str(timezone.now()).split('-')
 class Toppage(generic.TemplateView):
     template_name = 'kakeibo/toppage.html'
+    # model = Budget
+    
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # search formを渡す
-        # # これから表示する年月
-        # year = int(self.kwargs.get('year'))
-        # month = int(self.kwargs.get('month'))
-        # context['year_month'] = f'{year}年{month}月'
-
-        # # 前月と次月をコンテキストに入れて渡す
-        # if month == 1:
-        #     prev_year = int(year) - 1
-        #     prev_month = 12
-        # else:
-        #     prev_year = int(year)
-        #     prev_month = int(month) - 1
-
-        # if month == 12:
-        #     next_year = int(year) + 1
-        #     next_month = 1
-        # else:
-        #     next_year = int(year)
-        #     next_month = int(month) + 1
-        # context['prev_year'] = prev_year
-        # context['prev_month'] = prev_month
-        # context['next_year'] = next_year
-        # context['next_month'] = next_month
-        # queryset = Payment.objects.filter(date__year=year)
-        # queryset = queryset.filter(date__month=month)
-        # # クエリセットが何もない時はcontextを返す
-        # # 後の工程でエラーになるため
-        objects = Payment.objects.all()
+        
+        year = TODAY[0]
+        month = TODAY[1]
+        next_year, next_month = get_next(year, month)
+        prev_year, prev_month = get_prev(year, month)
+        objects = Payment.objects.filter(
+            date__year = year, date__month = month
+        ).order_by("date")
         total = 0
         for object in objects:
             total += object.price
-        context['total'] = total
+        objects = Payment.objects.filter(
+            date__year = year, date__month = prev_month
+        ).order_by("date")
+        total_payment = 0
+        for object in objects:
+            total_payment += object.price
+        
+        
+        context = {
+            "year": year,
+            'month': month,
+            "total":total,
+            "total_payment":total_payment,
+            "next_year": next_year,
+            "next_month": next_month,
+            "prev_year": prev_year,
+            "prev_month": prev_month,
+        }
         # if not queryset:
         #     return context
         return context
     
-    
-    
+class BudgetCreate(generic.CreateView):
+    # template_name = 'kakeibo/budget_create.html'
+    model = Budget
 
 class PaymentList(generic.ListView):
     template_name = 'kakeibo/payment_list.html'
@@ -334,7 +325,35 @@ class MonthDashboard(generic.TemplateView):
         plot_type_pie = gen.month_pie(labels=pie_type_labels, values=pie_values)
         context['plot_type_pie'] = plot_type_pie
         return context
-    
 
-# class Rest(generic.TemplateView):
-#     """予算残高の計算と表示"""
+def get_next(year, month):
+    year = int(year)
+    month = int(month)
+    
+    if month==12:
+        return str(year + 1), "1"
+    else:
+        return str(year), str(month+1)
+    
+def get_prev(year, month):
+    year = int(year)
+    month = int(month)
+    
+    if month == 1:
+        return str(year-1), "12"
+    else:
+        return str(year), str(month-1)
+
+class TransitionView(plugins.BalanceTransitionMixin, generic.TemplateView):
+    """月毎の収支推移ページ"""
+    template_name = 'kakeibo/balance_transition.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.form = form = TransitionGraphSearchForm(self.request.GET or None)
+        context['search_form'] = self.form
+
+        data = self.get_balance_transition_data(form)
+        context.update(data)
+
+        return context
