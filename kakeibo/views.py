@@ -267,20 +267,8 @@ class MonthDashboard(generic.TemplateView):
         month = int(self.kwargs.get('month'))
         context['year_month'] = f'{year}年{month}月'
 
-        # 前月と次月をコンテキストに入れて渡す
-        if month == 1:
-            prev_year = year - 1
-            prev_month = 12
-        else:
-            prev_year = year
-            prev_month = month - 1
-
-        if month == 12:
-            next_year = year + 1
-            next_month = 1
-        else:
-            next_year = year
-            next_month = month + 1
+        next_year, next_month = get_next(year, month)
+        prev_year, prev_month = get_prev(year, month)
         context['prev_year'] = prev_year
         context['prev_month'] = prev_month
         context['next_year'] = next_year
@@ -293,7 +281,7 @@ class MonthDashboard(generic.TemplateView):
             return context
 
         df = read_frame(queryset,
-                        fieldnames=['date', 'price','card_type', 'category'])
+                        fieldnames=['date', 'price','card_type', 'category'])#dataframe形式に変換
 
         # グラフ作成クラスをインスタンス化
         gen = GraphGenerator()
@@ -325,6 +313,7 @@ class MonthDashboard(generic.TemplateView):
         # plot_type_pie = gen.month_pie(labels=pie_type_labels, values=pie_values)
         # context['plot_type_pie'] = plot_type_pie
         # return context
+        return context
 
 def get_next(year, month):
     year = int(year)
@@ -343,5 +332,4 @@ def get_prev(year, month):
         return str(year-1), "12"
     else:
         return str(year), str(month-1)
-
 
