@@ -324,7 +324,7 @@ class MonthDashboard(generic.TemplateView):
         # pie_values = [val[0] for val in df_pie_type.values]
         # plot_type_pie = gen.month_pie(labels=pie_type_labels, values=pie_values)
         # context['plot_type_pie'] = plot_type_pie
-        # return context
+        return context
 
 def get_next(year, month):
     year = int(year)
