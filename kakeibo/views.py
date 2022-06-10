@@ -344,16 +344,4 @@ def get_prev(year, month):
     else:
         return str(year), str(month-1)
 
-class TransitionView(plugins.BalanceTransitionMixin, generic.TemplateView):
-    """月毎の収支推移ページ"""
-    template_name = 'kakeibo/balance_transition.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        self.form = form = TransitionGraphSearchForm(self.request.GET or None)
-        context['search_form'] = self.form
-
-        data = self.get_balance_transition_data(form)
-        context.update(data)
-
-        return context
