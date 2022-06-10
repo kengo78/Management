@@ -34,10 +34,12 @@ class Toppage(generic.TemplateView):
         total = 0
         for object in objects:
             total += object.price
+        
         objects = Payment.objects.filter(
             date__year = year, date__month = prev_month
         ).order_by("date")
         total_payment = 0
+        #クレカなので先月の利用額
         for object in objects:
             total_payment += object.price
         
