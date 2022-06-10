@@ -312,19 +312,19 @@ class MonthDashboard(generic.TemplateView):
         # totalの数字を計算して渡す
         context['total_payment'] = df['price'].sum()
 
-        # 日別の棒グラフの素材を渡す
-        df_bar = pd.pivot_table(df, index='date', values='price', aggfunc=np.sum)
-        dates = list(df_bar.index.values)
-        heights = [val[0] for val in df_bar.values]
-        plot_bar = gen.month_daily_bar(x_list=dates, y_list=heights)
-        context['plot_bar'] = plot_bar
+        # # 日別の棒グラフの素材を渡す
+        # df_bar = pd.pivot_table(df, index='date', values='price', aggfunc=np.sum)
+        # dates = list(df_bar.index.values)
+        # heights = [val[0] for val in df_bar.values]
+        # plot_bar = gen.month_daily_bar(x_list=dates, y_list=heights)
+        # context['plot_bar'] = plot_bar
         
-        df_pie_type = pd.pivot_table(df, index='card_type', values='price', aggfunc=np.sum)
-        pie_type_labels = list(df_pie_type.index.values)
-        pie_values = [val[0] for val in df_pie_type.values]
-        plot_type_pie = gen.month_pie(labels=pie_type_labels, values=pie_values)
-        context['plot_type_pie'] = plot_type_pie
-        return context
+        # df_pie_type = pd.pivot_table(df, index='card_type', values='price', aggfunc=np.sum)
+        # pie_type_labels = list(df_pie_type.index.values)
+        # pie_values = [val[0] for val in df_pie_type.values]
+        # plot_type_pie = gen.month_pie(labels=pie_type_labels, values=pie_values)
+        # context['plot_type_pie'] = plot_type_pie
+        # return context
 
 def get_next(year, month):
     year = int(year)
