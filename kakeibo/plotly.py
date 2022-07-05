@@ -1,7 +1,6 @@
 import plotly.graph_objects as go
 
 class GraphGenerator:
-    
     def month_pie(self, labels, values):
         fig = go.Figure()#インスタンス作成
         fig.add_trace(go.Pie(labels=labels,

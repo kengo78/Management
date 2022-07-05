@@ -1,6 +1,7 @@
 from cProfile import label
 from django import forms
-from .models import Payment, PaymentCategory,PaymentCard, Income, IncomeCategory
+from django.db.models import fields
+from .models import Budget, Payment, PaymentCategory,PaymentCard, Income, IncomeCategory
 from django.utils import timezone
 from .widgets import RadioSelect
 from django.contrib.auth.forms import UserCreationForm
@@ -113,6 +114,18 @@ class IncomeSearchForm(forms.Form):
     )
     
     #銀行残高の表示
+class BudgetCreateForm(forms.ModelForm):
+    """給与登録"""
+    class Meta:
+        model = Budget
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form'
+            field.widget.attrs['placeholder'] = field.label
+            field.widget.attrs['autocomplete'] = 'off'
     
 class PaymentCreateForm(forms.ModelForm):
     """支出登録"""

@@ -60,7 +60,18 @@ class Toppage(generic.TemplateView):
     
 class BudgetCreate(generic.CreateView):
     # template_name = 'kakeibo/budget_create.html'
+    "支出登録"
+    template_name = 'kakeibo/register.html'
     model = Budget
+    form_class = PaymentCreateForm
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = '支出登録'
+        return context
+    def get_success_url(self):
+        return reverse_lazy('kakeibo:payment_list')
+    
 
 class PaymentList(generic.ListView):
     template_name = 'kakeibo/payment_list.html'
